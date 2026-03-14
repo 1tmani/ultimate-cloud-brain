@@ -80,3 +80,17 @@
 <script src="script.js"></script>
 </body>
 </html>
+<script>
+async function runCommand() {
+    const cmd = document.getElementById("cmd").value;
+
+    const res = await fetch("/command", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({command: cmd})
+    });
+
+    const data = await res.json();
+    document.getElementById("status").innerText = data.result;
+}
+</script>
