@@ -1,9 +1,21 @@
-from flask import Flask
-app = Flask(__name__)
+from flask import Flask, request
+from commands import execute
+from memory import save_command
+from ui_engine import page
+from database import init_db, save_db
 
-@app.route("/")
+app = Flask(__name__)
+init_db()
+
+@app.route("/", methods=["GET", "POST"])
 def home():
-    return "Live Running"
+    output = "System Active 🚀"
+    if request.method == "POST":
+        command = request.form["command"]
+        save_command(command)
+        save_db(command)
+        output = execute(command)
+    return page(output)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
